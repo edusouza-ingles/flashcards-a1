@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>A1 Vocabulary Flashcards</title>
+<style>
+:root{--navy:#173653;--teal:#0d9488;--mint:#dff7ef;--ink:#183247;--muted:#647789;--paper:#f4f8fb;--line:#dce7ee;--white:#fff;--gold:#f3b942}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);font-family:Arial,Helvetica,sans-serif;color:var(--ink)}
+button,input,select{font:inherit}
+.app{max-width:1100px;margin:0 auto;padding:20px}
+header{background:linear-gradient(120deg,#173653,#245879);color:white;padding:20px 24px;border-radius:20px;margin-bottom:18px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+.brand{display:flex;align-items:center;gap:18px;min-width:0}
+.brand-logo{width:88px;height:88px;object-fit:cover;border-radius:50%;border:3px solid rgba(255,255,255,.9);flex:0 0 auto}
+header .brand-copy{min-width:0}
+button:active{filter:brightness(.86);transform:translateY(1px) scale(.97)}
+.icon-btn.on{box-shadow:0 0 0 3px #84d8c7}.danger.on{box-shadow:0 0 0 3px #f0b4a8}.secondary.on{background:#cfeee6;color:#087b70}.icon-btn{width:48px;height:46px;padding:0;display:inline-flex;align-items:center;justify-content:center;font-size:24px;line-height:1}
+.nav button{font-size:38px;min-height:58px;padding:4px 12px}
+@media(max-width:760px){.brand-logo{width:68px;height:68px}.brand{gap:12px}}
+header h1{font-size:clamp(24px,4vw,34px);margin:0 0 7px}
+header p{margin:0;color:#d8e9f3;line-height:1.5}
+.level{background:#25c6a4;color:#083f3a;border-radius:12px;padding:10px 15px;font-weight:800;white-space:nowrap}
+.toolbar{display:grid;grid-template-columns:1fr 1.3fr auto;gap:10px;margin-bottom:16px}
+select,input{width:100%;border:1px solid var(--line);background:white;border-radius:12px;padding:13px;color:var(--ink);outline:none}
+button{border:0;border-radius:12px;padding:12px 16px;font-weight:700;cursor:pointer;transition:.15s}
+@media(hover:hover){button:hover{filter:brightness(.97);transform:translateY(-1px)}}
+button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid #84d8c7;outline-offset:2px}
+.primary{background:var(--teal);color:white}.secondary{background:#e8f0f5;color:var(--navy)}.gold{background:#fff1cc;color:#75500a}.danger{background:#fff0ed;color:#9c3e30}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:16px}
+.stat{background:white;border:1px solid var(--line);border-radius:14px;padding:13px 16px}
+.stat strong{display:block;font-size:23px;color:var(--navy)}.stat span{font-size:12px;color:var(--muted)}
+.progress-wrap{height:9px;background:#e3ebf0;border-radius:99px;overflow:hidden;margin:0 0 18px}
+.progress{height:100%;width:0;background:linear-gradient(90deg,#0d9488,#57c7a9);transition:width .25s}
+.stage{display:grid;grid-template-columns:minmax(0,1fr) 250px;gap:16px;align-items:start}
+.main-card{background:white;border:1px solid var(--line);border-radius:20px;padding:20px;box-shadow:0 5px 20px #193b5210}
+.card-meta{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px;color:var(--muted);font-size:13px}
+.pill{background:#e7f7f3;color:#087b70;border-radius:99px;padding:7px 11px;font-weight:700}
+.flip-card{perspective:1000px;min-height:310px;cursor:pointer}
+.flip-inner{position:relative;-webkit-transform-style:preserve-3d;min-height:310px;transform-style:preserve-3d;transition:transform .55s}
+.flip-card.flipped .flip-inner{transform:rotateY(180deg)}
+.face{position:absolute;inset:0;-webkit-backface-visibility:hidden;backface-visibility:hidden;border-radius:18px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:25px}
+.front{background:linear-gradient(145deg,#e9f4ff,#f3f8ff);border:1px solid #d5e8f8}
+.back{background:linear-gradient(145deg,#e4f8f1,#f3fcf8);border:1px solid #cceee2;transform:rotateY(180deg)}
+.word{font-size:clamp(32px,6vw,48px);font-weight:800;letter-spacing:.5px;color:var(--navy);margin:10px 0}
+.translation{font-size:26px;font-weight:800;color:#087b70;margin:8px 0}
+.example{font-size:18px;line-height:1.5;margin:8px 0;color:#24465c}
+.example-pt{color:var(--muted);font-size:14px}
+.hint{color:var(--muted);font-size:13px;margin-top:18px}
+.card-actions{display:flex;flex-wrap:wrap;justify-content:center;gap:9px;margin:16px 0 6px}
+.nav{display:flex;justify-content:space-between;gap:10px;margin-top:14px}
+.nav button{flex:1}
+.side{background:white;border:1px solid var(--line);border-radius:18px;padding:18px}
+.side h3{margin:0 0 12px;font-size:17px}
+.side p{font-size:13px;color:var(--muted);line-height:1.5}
+.category-list{display:flex;flex-direction:column;gap:7px}
+.cat-btn{text-align:left;background:#f3f7fa;color:var(--ink);padding:10px 12px;display:flex;justify-content:space-between;gap:8px}
+.cat-btn.active{background:#dff7ef;color:#087b70;box-shadow:inset 3px 0 #0d9488}
+.cat-btn small{color:var(--muted)}
+.empty{padding:40px 15px;text-align:center;color:var(--muted)}
+.footer-note{font-size:12px;color:var(--muted);line-height:1.5;margin:16px 3px 4px}
+.mobile-cats{display:none}
+@media(max-width:760px){
+ .app{padding:12px}header{padding:20px;border-radius:16px;align-items:flex-start}header p{font-size:14px}.level{font-size:12px;padding:8px 10px}
+ .toolbar{grid-template-columns:1fr 1fr}.toolbar input{grid-column:1/-1}
+ .stage{grid-template-columns:1fr}.side{order:2}.category-list{display:grid;grid-template-columns:1fr 1fr}
+ .flip-card,.flip-inner{min-height:285px}.stats{gap:7px}.stat{padding:10px}.stat strong{font-size:20px}.stat span{font-size:11px}
+}
+@media(max-width:420px){.level{display:none}.toolbar{grid-template-columns:1fr}.toolbar input{grid-column:auto}.category-list{grid-template-columns:1fr 1fr}.face{padding:18px}.example{font-size:16px}}
+</style>
+</head>
+<body>
+<div class="app">
+<header>
+ <div class="brand">
+  <img class="brand-logo" alt="Logo Teacher Edu Souza" width="88" height="88" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALQAAAC0CAMAAAAKE/YAAAAWfmNhQlgAABZ+anVtYgAAAB5qdW1kYzJwYQARABCAAACqADibcQNjMnBhAAAAFlhqdW1iAAAAR2p1bWRjMm1hABEAEIAAAKoAOJtxA3VybjpjMnBhOjhhMjUwZDliLTMwOWMtNDFiMi1iMTE4LTJlNGUyNjdjYTZkOQAAAAOTanVtYgAAAClqdW1kYzJhcwARABCAAACqADibcQNjMnBhLmFzc2VydGlvbnMAAAAAuGp1bWIAAABEanVtZGNib3IAEQAQgAAAqgA4m3ETYzJwYS5pbmdyZWRpZW50LnYzAAAAABhjMnNo33fJWjyuslHysj2E00zXAQAAAGxjYm9yo2lkYzpmb3JtYXRpaW1hZ2UvcG5namluc3RhbmNlSUR4LHhtcDppaWQ6ZjY5MjFlOWUtM2RmNC00NjA0LWE4OTMtMGIzY2YxYTM5YWNibHJlbGF0aW9uc2hpcGhwYXJlbnRPZgAAAeJqdW1iAAAAQWp1bWRjYm9yABEAEIAAAKoAOJtxE2MycGEuYWN0aW9ucy52MgAAAAAYYzJzaFuVmjPlc/JEA2ABMh+GMgUAAAGZY2JvcqJnYWN0aW9uc4KiZmFjdGlvbmtjMnBhLm9wZW5lZGpwYXJhbWV0ZXJzoWtpbmdyZWRpZW50c4GiY3VybHgtc2VsZiNqdW1iZj1jMnBhLmFzc2VydGlvbnMvYzJwYS5pbmdyZWRpZW50LnYzZGhhc2hYIJU7qc6hIDtOWz1N29CW4gVAUPQqw2ZxLDx/Pe1yPqMKpGZhY3Rpb254HWNvbS5hbnRocm9waWMuY2xhdWRlLnByb3ZpZGVkanBhcmFtZXRlcnOheB9jb20uYW50aHJvcGljLm9yaWdpbi1jb25maWRlbmNlZ3Vua25vd25rZGVzY3JpcHRpb254ZkNsYXVkZSBwcm92aWRlZCB0aGlzIGZpbGUgYXQgdGhlIHJlcXVlc3Qgb2YgYSB1c2VyIGFuZCBtYXkgaGF2ZSBjcmVhdGVkIG9yIG1vZGlmaWVkIHRoZSBmaWxlIGNvbnRlbnRzLm1zb2Z0d2FyZUFnZW50oWRuYW1lZkNsYXVkZXJhbGxBY3Rpb25zSW5jbHVkZWT1AAAAyGp1bWIAAABAanVtZGNib3IAEQAQgAAAqgA4m3ETYzJwYS5oYXNoLmRhdGEAAAAAGGMyc2jBwSXJ+K2zWrXppuBbXjl2AAAAgGNib3KlY2FsZ2ZzaGEyNTZjcGFkTQAAAAAAAAAAAAAAAABkaGFzaFggzsmTYCCKHi/TBEylXlqAAtRwxOp6WTDaRlSHEPI3OUdkbmFtZW5qdW1iZiBtYW5pZmVzdGpleGNsdXNpb25zgaJlc3RhcnQYIWZsZW5ndGgZFooAAAI+anVtYgAAACdqdW1kYzJjbAARABCAAACqADibcQNjMnBhLmNsYWltLnYyAAAAAg9jYm9ypWNhbGdmc2hhMjU2aXNpZ25hdHVyZXhNc2VsZiNqdW1iZj0vYzJwYS91cm46YzJwYTo4YTI1MGQ5Yi0zMDljLTQxYjItYjExOC0yZTRlMjY3Y2E2ZDkvYzJwYS5zaWduYXR1cmVqaW5zdGFuY2VJRHgseG1wOmlpZDpiNGFkM2U0OC01OTc4LTRiNWItYTUxZS0yZWU3MTI0NTUwMTRyY3JlYXRlZF9hc3NlcnRpb25zg6JjdXJseC1zZWxmI2p1bWJmPWMycGEuYXNzZXJ0aW9ucy9jMnBhLmluZ3JlZGllbnQudjNkaGFzaFgglTupzqEgO05bPU3b0JbiBUBQ9CrDZnEsPH897XI+owqiY3VybHgqc2VsZiNqdW1iZj1jMnBhLmFzc2VydGlvbnMvYzJwYS5hY3Rpb25zLnYyZGhhc2hYILy/BoA0xKs7kMKzQZz+P41hOB7fanOhQ/aURyIlwGJQomN1cmx4KXNlbGYjanVtYmY9YzJwYS5hc3NlcnRpb25zL2MycGEuaGFzaC5kYXRhZGhhc2hYILmLtekzYRLdW6JIFhaLJ6xQfQwqtaBrkFBqSK2yJ/MWdGNsYWltX2dlbmVyYXRvcl9pbmZvo2RuYW1lb0FudGhyb3BpYyBGaWxlc2d2ZXJzaW9uZTEuMC4wa3NwZWNWZXJzaW9uZTIuNC4wAAAQOGp1bWIAAAAoanVtZGMyY3MAEQAQgAAAqgA4m3EDYzJwYS5zaWduYXR1cmUAAAAQCGNib3LShFkCEqIBJhghWQIKMIICBjCCAY2gAwIBAgIUQOWgCu7COdC+uIP6BkIFPWdVEwAwCgYIKoZIzj0EAwMwSTEXMBUGA1UEChMOQW50aHJvcGljLCBQQkMxLjAsBgNVBAMTJUFudGhyb3BpYyBDb250ZW50IENyZWRlbnRpYWxzIFJvb3QgQ0EwHhcNMjYwODA3MTg0MzU2WhcNMjgwODA2MTk0MzU2WjBEMRcwFQYDVQQKEw5BbnRocm9waWMsIFBCQzEpMCcGA1UEAxMgQW50aHJvcGljIENsYXVkZSBDb250ZW50IFNpZ25pbmcwWTATBgcqhkjOPQIBBggqhkjOPQMBBwNCAASYegpry1AYBRTVNL1CpTlbROnY3dey+UrsF9C3phYrATN3ZHf93Mo8RQN0KOUuOn19P4oWNFWe5n2/She9N7eTo1gwVjAOBgNVHQ8BAf8EBAMCB4AwFQYDVR0lBA4wDAYKKwYBBAGD6F4CATAMBgNVHRMBAf8EAjAAMB8GA1UdIwQYMBaAFM5R4gSBTmRbI/jjxM+aPpzB11zCMAoGCCqGSM49BAMDA2cAMGQCMDFzHRSeAXrSy1WOzkbhPZ6Km2wGTmZ/2gK18k8BQGXyqz88Rdrz6CTX9flAnYNVxgIwcF9c3fVhqmJKpi+UhasNUMko69cyX6STPfta3Q8EjyzDjzoyrol46FP6VFHhvUcJoWNwYWRZDZ4AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD2WEC8cttmBgShICfXwRBUTuH4Nmit2GIByCyyJXtCCcxVFXteJIi5IgUV4InnlcFjgEQvMMfVb3XmcGPXnkFtNBpE+IdejAAAAf5QTFRFwSxLna3AGCNPSxMbXFpkXXCUw0JbhSwzkTxGtqajNkJaJE2AwCE/GyY9TUE/XYCbpGRe14+g3MW+3+Df/f39ADFqSDpEuCA+/NLDuSJBJhkkNSg0txg4WERM98m7RSw4STM8ACplCgYM9szDtLfDZUhQPTRBOzE86+jpx2pw7retiWdr16arblRZJhYcz3R2jYeRdGZsq6ewkHV2GxIazneK0dXZ56OcvB5A6qqj04aLk5iqdVxi0ZeUy8fM1LWvtrS7rYiHuMXPSWmPACZcr5aT5pqV/uPSsGdrVXSWxlhvHRYhk6W5c3iK09vil5SZ+tC+jlZZr3d4ujhTWVRZz6Sb1ZelG0Nz2+PnbCgycImlNVqEenR6Jkp3iXyEL1R7p5yj4rrDiUhPKwsUbjtDtkZXcDY76t3hepOsklxjr1daybzBs1lnTBslWFlnwCNDaIOdrIJ85oqLhzY6qXyCw0ljyW2B0IF9tQstvEpjPWGJaR0kj42hkWFdl4J6wBw8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAxF24swAAAIB0Uk5T//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////8VB6TqAAAlz0lEQVR42s2diV/a2tb3OdNz732e553TGLJJCGAkJAQIUJQZrChWrUO1ra21HrXt6Xw6nPGe4V9/11o7I5Pa3qH7c44oWvhm5beGPRK79kmtJvgtk4jHl5biS3F8wIY/uS3xIvi75dS1T22xfyT00hzBInQC21J8bg4fP2toRCTKuXicP06Anv+8oOdcTJcUroEaXsi3n7GlwcRIm3h8585jjk2mj0B/bpYGaEROxAz4+c5tTv2ZQyNi8enTO29+EATANq7jJcyRpj9n6MRj/M7IC0L5BJ+6yTXyGUP/DDa9KQg9g360Hfxd94cE3YDPEdpANdy5GU/EDaGnl/GpjiaWXGl/ppY2nG18eFrPgTIGzEbssqbRo9EA1/ws5dFJ6gNfKoMk4BpCRVNEpwc/S9c/U00DqOKU3R8HoijqZaMlKqLodFDvT90/M/6tySUFDR5u+QY81hQNuEtdFHIPqDWnpCiKriuVTmDmk55g/Pqp1KmPg05dW7+//uBhJHo4mq4oaOIKGLzWEnVRgScUu6WLJf/Peooh3Lv7adSpX2PXPuoVlule3woxgzNqaFgdwO3KSRm0gU1XdKelKCUeB4VasgIC+STka18IseUbV6dO3SB1jrYKmRbBdduxbF3n8tBbji3qAzd8JyGibH60qVOpdVBkTBCa11Y+Atqxj0sn5XIPWrlcPhkMBuWyTcCIDg8tx2nRRYBELFsRWxhIhFJSBIl/95HUqYfz+CIALdxbT13tRVJ3DeEFSyaTIlEGzTM0Zwd7t1x7OzbIpgJq6mqiAg9bKfdeX00Z9/ntivHY+eiK/3wTAkESvA6obdtuuQ0YPVHwSwBuegBjw8+iAtLQRbEFb42iTF27exVrpR4suzqMuY/3r3jVtzA0i9QI0rYty6pU/uj3KxWS84j9Sdy6WDFKEBodcIkHqWs3bhnzl44kqWtN33k8aKF2YyV1BX94ZFCiFr3mmddu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">
+  <div class="brand-copy"><h1>English A1 · Vocabulary Flashcards</h1><p>Aprenda palavras essenciais em inglês, uma de cada vez.</p></div>
+ </div>
+ <div class="level">NÍVEL A1</div>
+</header>
+
+<div class="toolbar">
+ <select id="categorySelect" aria-label="Escolher categoria"></select>
+ <input id="search" type="search" placeholder="Buscar palavra em inglês ou português..." aria-label="Buscar vocabulário">
+ <button class="secondary" id="shuffleBtn" title="Embaralhar" aria-label="Embaralhar">⤨ Embaralhar</button>
+</div>
+
+<div class="stats">
+ <div class="stat"><strong id="totalCount">0</strong><span>Cartões nesta seleção</span></div>
+ <div class="stat"><strong id="knownCount">0</strong><span>Marcados como aprendidos</span></div>
+ <div class="stat"><strong id="reviewCount">0</strong><span>Para revisar</span></div>
+</div>
+<div class="progress-wrap"><div class="progress" id="progress"></div></div>
+
+<div class="stage">
+ <main class="main-card">
+  <div class="card-meta"><span id="position">Cartão 1 de 1</span><span class="pill" id="categoryPill">Essenciais</span></div>
+  <div id="cardArea">
+   <div class="flip-card" id="flipCard" role="button" tabindex="0" aria-label="Virar cartão para ver a tradução">
+    <div class="flip-inner">
+     <section class="face front">
+      
+      <div class="word" id="frontWord">HELLO</div>
+      
+     </section>
+     <section class="face back">
+      
+      <div class="translation" id="backTranslation">Olá</div>
+      <div class="example" id="example">Hello! How are you?</div>
+      <div class="example-pt" id="examplePt">Olá! Como você está?</div>
+     </section>
+    </div>
+   </div>
+  </div>
+  <div class="card-actions">
+   <button class="secondary icon-btn" id="audioBtn" title="Ouvir pronúncia" aria-label="Ouvir pronúncia">🔊</button>
+   <button class="gold icon-btn" id="flipBtn" title="Virar cartão" aria-label="Virar cartão">↻</button>
+  </div>
+  <div class="card-actions">
+   <button class="danger icon-btn" id="reviewBtn" title="Ainda não sei" aria-label="Ainda não sei">✕</button>
+   <button class="primary icon-btn" id="knownBtn" title="Já aprendi" aria-label="Já aprendi">✓</button>
+  </div>
+  <div class="nav">
+   <button class="secondary" id="prevBtn" title="Cartão anterior" aria-label="Cartão anterior">←</button>
+   <button class="secondary" id="nextBtn" title="Próximo cartão" aria-label="Próximo cartão">→</button>
+  </div>
+  <p class="footer-note">Dica: tente lembrar o significado antes de virar o cartão. Depois, leia a frase de exemplo em voz alta.</p>
+ </main>
+ <aside class="side">
+  <h3>📚 Categorias</h3>
+  <div class="category-list" id="categoryList"></div>
+  <p>Escolha um tema para estudar um grupo específico de palavras.</p>
+  <button class="secondary" style="width:100%;margin-top:8px" id="resetBtn" title="Limpar meu progresso" aria-label="Limpar meu progresso">⌫ Limpar progresso</button>
+ </aside>
+</div>
+<p class="footer-note">O progresso é salvo neste navegador quando o armazenamento local está disponível. A pronúncia usa a voz em inglês instalada no navegador/dispositivo.</p>
+</div>
+
+<script>
+const cards = [
+["hello", "Olá", "Hello! My name is Anna.", "Olá! Meu nome é Anna.", "Essenciais"],
+["hi", "Oi", "Hi, how are you?", "Oi, como você está?", "Essenciais"],
+["goodbye", "Adeus / tchau", "Goodbye, Anna!", "Tchau, Anna!", "Essenciais"],
+["bye", "Tchau", "Bye! Have a nice day.", "Tchau! Tenha um bom dia.", "Essenciais"],
+["please", "Por favor", "A coffee, please.", "Um café, por favor.", "Essenciais"],
+["thank you", "Obrigado(a)", "Thank you very much.", "Muito obrigado.", "Essenciais"],
+["thanks", "Obrigado(a)", "Thanks a lot!", "Muito obrigado!", "Essenciais"],
+["sorry", "Desculpa / sinto muito", "I am sorry.", "Eu sinto muito.", "Essenciais"],
+["excuse me", "Com licença", "Excuse me, where is the bank?", "Com licença, onde fica o banco?", "Essenciais"],
+["yes", "Sim", "Yes, please.", "Sim, por favor.", "Essenciais"],
+["no", "Não", "No, thank you.", "Não, obrigado.", "Essenciais"],
+["maybe", "Talvez", "Maybe tomorrow.", "Talvez amanhã.", "Essenciais"],
+["name", "Nome", "What is your name?", "Qual é o seu nome?", "Pessoas"],
+["man", "Homem", "That man is my teacher.", "Aquele homem é meu professor.", "Pessoas"],
+["woman", "Mulher", "The woman is my mother.", "A mulher é minha mãe.", "Pessoas"],
+["boy", "Menino", "The boy is happy.", "O menino está feliz.", "Pessoas"],
+["girl", "Menina", "The girl is my sister.", "A menina é minha irmã.", "Pessoas"],
+["child", "Criança", "The child is at school.", "A criança está na escola.", "Pessoas"],
+["person", "Pessoa", "She is a nice person.", "Ela é uma pessoa legal.", "Pessoas"],
+["people", "Pessoas", "Many people live here.", "Muitas pessoas moram aqui.", "Pessoas"],
+["friend", "Amigo(a)", "He is my best friend.", "Ele é meu melhor amigo.", "Pessoas"],
+["family", "Família", "My family is big.", "Minha família é grande.", "Família"],
+["mother", "Mãe", "My mother is at home.", "Minha mãe está em casa.", "Família"],
+["father", "Pai", "My father works here.", "Meu pai trabalha aqui.", "Família"],
+["mom", "Mamãe / mãe", "My mom likes music.", "Minha mãe gosta de música.", "Família"],
+["dad", "Papai / pai", "My dad is at work.", "Meu pai está no trabalho.", "Família"],
+["brother", "Irmão", "I have one brother.", "Eu tenho um irmão.", "Família"],
+["sister", "Irmã", "My sister is a student.", "Minha irmã é estudante.", "Família"],
+["son", "Filho", "My son is five.", "Meu filho tem cinco anos.", "Família"],
+["daughter", "Filha", "Her daughter is happy.", "A filha dela está feliz.", "Família"],
+["husband", "Marido", "Her husband is a teacher.", "O marido dela é professor.", "Família"],
+["wife", "Esposa", "His wife is from Brazil.", "A esposa dele é do Brasil.", "Família"],
+["grandmother", "Avó", "My grandmother is at home.", "Minha avó está em casa.", "Família"],
+["grandfather", "Avô", "My grandfather is old.", "Meu avô é idoso.", "Família"],
+["house", "Casa", "This is my house.", "Esta é minha casa.", "Casa"],
+["home", "Lar / casa", "I am at home.", "Estou em casa.", "Casa"],
+["room", "Quarto / cômodo", "My room is small.", "Meu quarto é pequeno.", "Casa"],
+["bedroom", "Quarto", "My bedroom is big.", "Meu quarto é grande.", "Casa"],
+["bathroom", "Banheiro", "Where is the bathroom?", "Onde fica o banheiro?", "Casa"],
+["kitchen", "Cozinha", "She is in the kitchen.", "Ela está na cozinha.", "Casa"],
+["door", "Porta", "Please close the door.", "Por favor, feche a porta.", "Casa"],
+["window", "Janela", "Open the window, please.", "Abra a janela, por favor.", "Casa"],
+["table", "Mesa", "The book is on the table.", "O livro está sobre a mesa.", "Casa"],
+["chair", "Cadeira", "Sit on the chair.", "Sente-se na cadeira.", "Casa"],
+["bed", "Cama", "I go to bed at ten.", "Eu vou para a cama às dez.", "Casa"],
+["key", "Chave", "Where is my key?", "Onde está minha chave?", "Casa"],
+["book", "Livro", "This is an English book.", "Este é um livro de inglês.", "Objetos"],
+["pen", "Caneta", "I need a pen.", "Eu preciso de uma caneta.", "Objetos"],
+["pencil", "Lápis", "The pencil is blue.", "O lápis é azul.", "Objetos"],
+["bag", "Bolsa / mochila", "My bag is black.", "Minha bolsa é preta.", "Objetos"],
+["phone", "Telefone / celular", "My phone is new.", "Meu celular é novo.", "Objetos"],
+["computer", "Computador", "I use a computer every day.", "Eu uso um computador todos os dias.", "Objetos"],
+["car", "Carro", "His car is red.", "O carro dele é vermelho.", "Objetos"],
+["bus", "Ônibus", "I go to work by bus.", "Eu vou ao trabalho de ônibus.", "Transportes"],
+["train", "Trem", "The train is here.", "O trem está aqui.", "Transportes"],
+["bike", "Bicicleta", "I have a new bike.", "Eu tenho uma bicicleta nova.", "Transportes"],
+["water", "Água", "I drink water every day.", "Eu bebo água todos os dias.", "Comida e bebida"],
+["coffee", "Café", "I like coffee.", "Eu gosto de café.", "Comida e bebida"],
+["tea", "Chá", "I want tea.", "Eu quero chá.", "Comida e bebida"],
+["milk", "Leite", "I drink milk in the morning.", "Eu bebo leite de manhã.", "Comida e bebida"],
+["bread", "Pão", "I eat bread for breakfast.", "Eu como pão no café da manhã.", "Comida e bebida"],
+["rice", "Arroz", "We eat rice for lunch.", "Nós comemos arroz no almoço.", "Comida e bebida"],
+["egg", "Ovo", "I want an egg.", "Eu quero um ovo.", "Comida e bebida"],
+["cheese", "Queijo", "This cheese is good.", "Este queijo é bom.", "Comida e bebida"],
+["apple", "Maçã", "I eat an apple.", "Eu como uma maçã.", "Comida e bebida"],
+["banana", "Banana", "The banana is yellow.", "A banana é amarela.", "Comida e bebida"],
+["orange", "Laranja", "I want an orange.", "Eu quero uma laranja.", "Comida e bebida"],
+["food", "Comida / alimento", "The food is good.", "A comida está boa.", "Comida e bebida"],
+["breakfast", "Café da manhã", "I have breakfast at seven.", "Eu tomo café da manhã às sete.", "Comida e bebida"],
+["lunch", "Almoço", "I have lunch at twelve.", "Eu almoço ao meio-dia.", "Comida e bebida"],
+["dinner", "Jantar", "We have dinner at home.", "Nós jantamos em casa.", "Comida e bebida"],
+["school", "Escola", "I am at school.", "Estou na escola.", "Lugares"],
+["work", "Trabalho", "I am at work.", "Estou no trabalho.", "Lugares"],
+["office", "Escritório", "I work in an office.", "Eu trabalho em um escritório.", "Lugares"],
+["bank", "Banco", "I am at the bank.", "Estou no banco.", "Lugares"],
+["store", "Loja", "I go to the store.", "Eu vou à loja.", "Lugares"],
+["shop", "Loja", "This shop is small.", "Esta loja é pequena.", "Lugares"],
+["supermarket", "Supermercado", "I am at the supermarket.", "Estou no supermercado.", "Lugares"],
+["restaurant", "Restaurante", "The restaurant is good.", "O restaurante é bom.", "Lugares"],
+["hospital", "Hospital", "He is at the hospital.", "Ele está no hospital.", "Lugares"],
+["park", "Parque", "The park is big.", "O parque é grande.", "Lugares"],
+["city", "Cidade", "I live in a big city.", "Eu moro em uma cidade grande.", "Lugares"],
+["street", "Rua", "My house is on this street.", "Minha casa fica nesta rua.", "Lugares"],
+["country", "País", "Brazil is a big country.", "O Brasil é um país grande.", "Lugares"],
+["morning", "Manhã", "Good morning!", "Bom dia!", "Tempo"],
+["afternoon", "Tarde", "Good afternoon!", "Boa tarde!", "Tempo"],
+["evening", "Noite (início)", "Good evening!", "Boa noite!", "Tempo"],
+["night", "Noite", "Good night!", "Boa noite!", "Tempo"],
+["today", "Hoje", "I am at home today.", "Estou em casa hoje.", "Tempo"],
+["tomorrow", "Amanhã", "See you tomorrow.", "Até amanhã.", "Tempo"],
+["yesterday", "Ontem", "I was at home yesterday.", "Eu estava em casa ontem.", "Tempo"],
+["day", "Dia", "It is a good day.", "É um bom dia.", "Tempo"],
+["week", "Semana", "I study every week.", "Eu estudo toda semana.", "Tempo"],
+["month", "Mês", "It is a new month.", "É um novo mês.", "Tempo"],
+["year", "Ano", "Happy New Year!", "Feliz Ano Novo!", "Tempo"],
+["Monday", "Segunda-feira", "I work on Monday.", "Eu trabalho na segunda-feira.", "Tempo"],
+["Friday", "Sexta-feira", "Today is Friday.", "Hoje é sexta-feira.", "Tempo"],
+["weekend", "Fim de semana", "I am at home on the weekend.", "Eu fico em casa no fim de semana.", "Tempo"],
+["time", "Tempo / hora", "What time is it?", "Que horas são?", "Tempo"],
+["hour", "Hora", "I study for one hour.", "Eu estudo por uma hora.", "Tempo"],
+["now", "Agora", "I am at work now.", "Estou no trabalho agora.", "Tempo"],
+["always", "Sempre", "I always drink water.", "Eu sempre bebo água.", "Frequência"],
+["usually", "Geralmente", "I usually eat lunch at home.", "Eu geralmente almoço em casa.", "Frequência"],
+["often", "Frequentemente", "We often go to the park.", "Nós frequentemente vamos ao parque.", "Frequência"],
+["sometimes", "Às vezes", "I sometimes cook.", "Às vezes eu cozinho.", "Frequência"],
+["never", "Nunca", "He never drinks coffee.", "Ele nunca bebe café.", "Frequência"],
+["big", "Grande", "It is a big house.", "É uma casa grande.", "Adjetivos"],
+["small", "Pequeno(a)", "I have a small dog.", "Eu tenho um cachorro pequeno.", "Adjetivos"],
+["good", "Bom / boa", "This book is good.", "Este livro é bom.", "Adjetivos"],
+["bad", "Ruim / mau", "It is a bad day.", "É um dia ruim.", "Adjetivos"],
+["happy", "Feliz", "I am happy today.", "Estou feliz hoje.", "Adjetivos"],
+["sad", "Triste", "She is sad.", "Ela está triste.", "Adjetivos"],
+["tired", "Cansado(a)", "I am tired.", "Estou cansado.", "Adjetivos"],
+["hungry", "Com fome", "We are hungry.", "Estamos com fome.", "Adjetivos"],
+["thirsty", "Com sede", "He is thirsty.", "Ele está com sede.", "Adjetivos"],
+["hot", "Quente", "The coffee is hot.", "O café está quente.", "Adjetivos"],
+["cold", "Frio", "The water is cold.", "A água está fria.", "Adjetivos"],
+["new", "Novo(a)", "I have a new phone.", "Eu tenho um celular novo.", "Adjetivos"],
+["old", "Velho(a) / antigo(a)", "This is an old book.", "Este é um livro antigo.", "Adjetivos"],
+["young", "Jovem", "She is young.", "Ela é jovem.", "Adjetivos"],
+["beautiful", "Bonito(a) / lindo(a)", "It is a beautiful day.", "É um dia lindo.", "Adjetivos"],
+["easy", "Fácil", "English is easy.", "Inglês é fácil.", "Adjetivos"],
+["difficult", "Difícil", "This word is difficult.", "Esta palavra é difícil.", "Adjetivos"],
+["right", "Certo / direita", "Yes, that is right.", "Sim, isso está certo.", "Adjetivos"],
+["wrong", "Errado", "No, that is wrong.", "Não, isso está errado.", "Adjetivos"],
+["open", "Aberto / abrir", "The door is open.", "A porta está aberta.", "Adjetivos"],
+["closed", "Fechado", "The store is closed.", "A loja está fechada.", "Adjetivos"],
+["red", "Vermelho", "The car is red.", "O carro é vermelho.", "Cores"],
+["blue", "Azul", "My bag is blue.", "Minha bolsa é azul.", "Cores"],
+["green", "Verde", "The tree is green.", "A árvore é verde.", "Cores"],
+["yellow", "Amarelo", "The sun is yellow.", "O sol é amarelo.", "Cores"],
+["black", "Preto", "My shoes are black.", "Meus sapatos são pretos.", "Cores"],
+["white", "Branco", "The paper is white.", "O papel é branco.", "Cores"],
+["one", "Um", "I have one brother.", "Eu tenho um irmão.", "Números"],
+["two", "Dois", "I have two sisters.", "Eu tenho duas irmãs.", "Números"],
+["three", "Três", "Three books are here.", "Três livros estão aqui.", "Números"],
+["five", "Cinco", "I have five pens.", "Eu tenho cinco canetas.", "Números"],
+["ten", "Dez", "Ten people are here.", "Dez pessoas estão aqui.", "Números"],
+["be", "Ser / estar", "I want to be happy.", "Eu quero ser feliz.", "Verbos"],
+["have", "Ter", "I have a dog.", "Eu tenho um cachorro.", "Verbos"],
+["do", "Fazer", "I do my work at home.", "Eu faço meu trabalho em casa.", "Verbos"],
+["go", "Ir", "I go to school.", "Eu vou para a escola.", "Verbos"],
+["come", "Vir", "Please come here.", "Por favor, venha aqui.", "Verbos"],
+["live", "Morar / viver", "I live in Brazil.", "Eu moro no Brasil.", "Verbos"],
+["like", "Gostar", "I like music.", "Eu gosto de música.", "Verbos"],
+["love", "Amar / adorar", "I love my family.", "Eu amo minha família.", "Verbos"],
+["want", "Querer", "I want some water.", "Eu quero um pouco de água.", "Verbos"],
+["need", "Precisar", "I need help.", "Eu preciso de ajuda.", "Verbos"],
+["eat", "Comer", "We eat lunch at home.", "Nós almoçamos em casa.", "Verbos"],
+["drink", "Beber", "I drink tea.", "Eu bebo chá.", "Verbos"],
+["make", "Fazer / criar", "I make breakfast.", "Eu preparo o café da manhã.", "Verbos"],
+["get", "Pegar / receber / chegar", "I get home at six.", "Eu chego em casa às seis.", "Verbos"],
+["see", "Ver", "I see my friend.", "Eu vejo meu amigo.", "Verbos"],
+["look", "Olhar", "Look at this!", "Olhe isto!", "Verbos"],
+["watch", "Assistir", "We watch TV at night.", "Nós assistimos à TV à noite.", "Verbos"],
+["read", "Ler", "I read a book.", "Eu leio um livro.", "Verbos"],
+["write", "Escrever", "Please write your name.", "Por favor, escreva seu nome.", "Verbos"],
+["speak", "Falar", "I speak English.", "Eu falo inglês.", "Verbos"],
+["say", "Dizer", "Please say it again.", "Por favor, diga de novo.", "Verbos"],
+["listen", "Escutar", "Listen to me.", "Escute-me.", "Verbos"],
+["hear", "Ouvir", "Can you hear me?", "Você consegue me ouvir?", "Verbos"],
+["learn", "Aprender", "I learn English.", "Eu aprendo inglês.", "Verbos"],
+["study", "Estudar", "I study every day.", "Eu estudo todos os dias.", "Verbos"],
+["teach", "Ensinar", "I teach English.", "Eu ensino inglês.", "Verbos"],
+["know", "Saber / conhecer", "I know your name.", "Eu sei o seu nome.", "Verbos"],
+["think", "Pensar / achar", "I think it is good.", "Eu acho que é bom.", "Verbos"],
+["understand", "Entender", "I understand you.", "Eu entendo você.", "Verbos"],
+["work", "Trabalhar", "I work every day.", "Eu trabalho todos os dias.", "Verbos"],
+["play", "Brincar / jogar / tocar", "I play soccer.", "Eu jogo futebol.", "Verbos"],
+["sleep", "Dormir", "I sleep at night.", "Eu durmo à noite.", "Verbos"],
+["wake up", "Acordar", "I wake up at six.", "Eu acordo às seis.", "Verbos"],
+["buy", "Comprar", "I buy bread at the store.", "Eu compro pão na loja.", "Verbos"],
+["pay", "Pagar", "Can I pay now?", "Posso pagar agora?", "Verbos"],
+["help", "Ajudar", "Can you help me?", "Você pode me ajudar?", "Verbos"],
+["ask", "Perguntar / pedir", "Can I ask a question?", "Posso fazer uma pergunta?", "Verbos"],
+["answer", "Responder / resposta", "Please answer the question.", "Por favor, responda à pergunta.", "Verbos"],
+["walk", "Caminhar", "I walk to work.", "Eu caminho até o trabalho.", "Verbos"],
+["run", "Correr", "I run in the park.", "Eu corro no parque.", "Verbos"],
+["sit", "Sentar", "Please sit down.", "Por favor, sente-se.", "Verbos"],
+["stand", "Ficar de pé", "Please stand up.", "Por favor, fique de pé.", "Verbos"],
+["start", "Começar", "School starts at eight.", "A escola começa às oito.", "Verbos"],
+["finish", "Terminar", "I finish work at five.", "Eu termino o trabalho às cinco.", "Verbos"],
+["cook", "Cozinhar", "I cook dinner.", "Eu preparo o jantar.", "Verbos"],
+["clean", "Limpar", "I clean my room.", "Eu limpo meu quarto.", "Verbos"],
+];
+
+const categories=["Todas as categorias",...new Set(cards.map(c=>c[4]))];
+let selectedCategory=categories[0], filtered=[...cards], index=0, flipped=false, isShuffled=false;
+let progressData={};
+try{progressData=JSON.parse(localStorage.getItem("a1-vocab-progress")||"{}")||{}}catch(e){}
+const $=id=>document.getElementById(id);
+function save(){try{localStorage.setItem("a1-vocab-progress",JSON.stringify(progressData))}catch(e){}}
+const keyOf=c=>c[0]+"|"+c[4];
+function status(c){return progressData[keyOf(c)]||""}
+function updateStats(){
+ const known=filtered.filter(c=>status(c)==="known").length;
+ const review=filtered.filter(c=>status(c)==="review").length;
+ $("totalCount").textContent=filtered.length;
+ $("knownCount").textContent=known;
+ $("reviewCount").textContent=review;
+ $("progress").style.width=(filtered.length?known/filtered.length*100:0)+"%";
+}
+function render(){
+ if(!filtered.length){$("cardArea").innerHTML='<div class="empty">Nenhuma palavra encontrada. Tente outra busca ou categoria.</div>';$("position").textContent="0 cartões";$("categoryPill").textContent="—";updateStats();return}
+ if(index>=filtered.length)index=0;
+ const c=filtered[index];flipped=false;
+ $("cardArea").innerHTML=`<div class="flip-card" id="flipCard" role="button" tabindex="0" aria-label="Virar cartão para ver a tradução"><div class="flip-inner"><section class="face front"><div class="word" id="frontWord"></div></section><section class="face back"><div class="translation" id="backTranslation"></div><div class="example" id="example"></div><div class="example-pt" id="examplePt"></div></section></div></div>`;
+ $("frontWord").textContent=c[0].toUpperCase();$("backTranslation").textContent=c[1];$("example").textContent=c[2];$("examplePt").textContent=c[3];
+ $("position").textContent=`Cartão ${index+1} de ${filtered.length}`;
+ $("categoryPill").textContent=c[4];
+ $("flipCard").addEventListener("click",flip);
+ $("flipCard").addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();flip()}});
+ $("knownBtn").textContent="✓";
+ $("reviewBtn").textContent="✕";
+ $("knownBtn").classList.toggle("on",status(c)==="known");
+ $("reviewBtn").classList.toggle("on",status(c)==="review");
+ updateStats();renderCats();
+}
+function flip(){flipped=!flipped;$("flipCard")?.classList.toggle("flipped",flipped)}
+function setStatus(s){
+ if(!filtered.length)return;
+ const c=filtered[index],k=keyOf(c);
+ if(status(c)===s){delete progressData[k];save();render();return}
+ progressData[k]=s;save();
+ index=(index+1)%filtered.length;render();
+}
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}}
+function applyFilters(){
+ const q=$("search").value.trim().toLowerCase();
+ filtered=cards.filter(c=>(selectedCategory===categories[0]||c[4]===selectedCategory)&&c.slice(0,4).join(" ").toLowerCase().includes(q));
+ if(isShuffled)shuffle(filtered);
+ index=0;render();
+}
+function renderCats(){
+ const list=$("categoryList");list.innerHTML="";
+ categories.forEach(cat=>{const b=document.createElement("button");b.className="cat-btn"+(cat===selectedCategory?" active":"");const count=cat===categories[0]?cards.length:cards.filter(c=>c[4]===cat).length;b.innerHTML=`<span>${cat}</span><small>${count}</small>`;b.addEventListener("click",()=>{selectedCategory=cat;$("categorySelect").value=cat;applyFilters()});list.appendChild(b)});
+}
+function speak(){
+ if(!filtered.length)return;
+ const c=filtered[index];
+ if(!("speechSynthesis" in window)){alert("A reprodução de voz não está disponível neste navegador.");return}
+ speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(c[0]);u.lang="en-US";u.rate=.86;speechSynthesis.speak(u);
+}
+$("categorySelect").innerHTML=categories.map(c=>`<option>${c}</option>`).join("");
+$("categorySelect").addEventListener("change",e=>{selectedCategory=e.target.value;applyFilters()});
+$("search").addEventListener("input",applyFilters);
+$("shuffleBtn").addEventListener("click",()=>{
+ isShuffled=!isShuffled;
+ $("shuffleBtn").classList.toggle("on",isShuffled);
+ $("shuffleBtn").textContent=isShuffled?"⤨ Embaralhado":"⤨ Embaralhar";
+ applyFilters();
+});
+$("flipBtn").addEventListener("click",flip);
+$("audioBtn").addEventListener("click",speak);
+$("knownBtn").addEventListener("click",()=>setStatus("known"));
+$("reviewBtn").addEventListener("click",()=>setStatus("review"));
+$("prevBtn").addEventListener("click",()=>{if(filtered.length){index=(index-1+filtered.length)%filtered.length;render()}});
+$("nextBtn").addEventListener("click",()=>{if(filtered.length){index=(index+1)%filtered.length;render()}});
+$("resetBtn").addEventListener("click",()=>{if(confirm("Tem certeza de que deseja apagar o progresso salvo neste navegador?")){progressData={};save();render()}});
+render();
+</script>
+</body>
+</html>
